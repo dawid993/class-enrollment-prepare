@@ -26,20 +26,21 @@ var MINUTES_JUMP = 15;
 $(function() {
 		generateTimeSchedule();
 		addEventToSchedule(8,0,8,30);
-		addEventToSchedule(12,00,13,00);
+		addEventToSchedule(12,00,13,0);
 		addEventToSchedule(13,15,15,0);
 		addEventToSchedule(9,0,11,15);
 		addEventToSchedule(12,15,13,0);
-		addEventToSchedule(10,15,12,00);
-		addEventToSchedule(11,15,12,0);
-		addEventToSchedule(10,0,14,30);				
+		addEventToSchedule(10,45,12,15);
+		addEventToSchedule(11,15,12,15);
+		addEventToSchedule(10,0,14,30);		
 	});	
 	
 	function generateTimeSchedule(){
 		var table="<table id=\"time-grid\" class=\"scheduler\"><thead><tr><td colspan=\""+(SECTIONS+1)+"\">Poniedzialek</td></tr></thead>";
 		table+="<tbody>";
-		for(var i=START_HOUR;i<=END_HOUR;i++)	
-			table+=generateSectionForHour(i);
+		for(var i=START_HOUR;i<=END_HOUR;i++){	
+			table+=generateSectionForHour(i);		
+		}
 		table+="</tbody></table>";
 		$("#table-schedule").html(table);
 	}
@@ -63,6 +64,7 @@ $(function() {
 	}
 	
 	function addEventToSchedule(startHour,startMinutes,endHour,endMinutes){
+	alert(""+startHour+" "+startMinutes+"-"+endHour+" "+endMinutes);
 		var mergeCell = ((endHour-startHour) +(endMinutes-startMinutes)/60)*4;
 		var columnIndex = findAvaiableColumn(startHour,startMinutes,mergeCell);	
 		var cellId =""+startHour+startMinutes+"_"+columnIndex;
@@ -87,10 +89,10 @@ $(function() {
 	}
 	
 	function checkCellsAvaibility(startHour,startMinutes,numberOfCells,columnIndex){
-		for(var i=0;i<=numberOfCells;i++){
+		for(var i=0;i<numberOfCells;i++){
 			currentCellId =""+startHour+startMinutes+"_"+columnIndex;		
-				//alert(currentCellId+" "+$("#time-grid").find("#"+currentCellId).length);
-			if($("#time-grid").find("#"+currentCellId).length == 0)
+			findElement = $("#time-grid").find("#"+currentCellId);	
+			if(findElement.length == 0 || findElement.hasClass("event-section") )
 				return false;
 				
 			startMinutes+=MINUTES_JUMP;
@@ -108,6 +110,10 @@ $(function() {
 		while(!isFree && i<=SECTIONS)
 			isFree = checkCellsAvaibility(startHour,startMinutes,numberOfCells,++i);					
 		return i;
+	}
+	
+	function getEventDiv(eventId){
+		
 	}
 </script>
 
