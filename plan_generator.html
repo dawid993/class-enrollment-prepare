@@ -1,0 +1,115 @@
+<html>
+<head>
+<title>Page Title</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="table-schedule-style.css" />
+</head>
+<body>
+	<div id="table-schedule">
+	</div>
+<script>
+/***
+* @Author David Benq
+* @Version 1.10
+* @Status {unstable,basic test}
+*
+* @Desc{
+* This script is responsible for auto generate time schedule to make 	
+* user enrollment more visual convinient and easy. 
+* }
+*/
+var START_HOUR   = 8;
+var END_HOUR     = 16;
+var HOUR_PARTES  = 4;
+var SECTIONS     = 6;
+var MINUTES_JUMP = 15;
+$(function() {
+		generateTimeSchedule();
+		addEventToSchedule(8,0,8,30);
+		addEventToSchedule(12,00,13,00);
+		addEventToSchedule(13,15,15,0);
+		addEventToSchedule(9,0,11,15);
+		addEventToSchedule(12,15,13,0);
+		addEventToSchedule(10,15,12,00);
+		addEventToSchedule(11,15,12,0);
+		addEventToSchedule(10,0,14,30);				
+	});	
+	
+	function generateTimeSchedule(){
+		var table="<table id=\"time-grid\" class=\"scheduler\"><thead><tr><td colspan=\""+(SECTIONS+1)+"\">Poniedzialek</td></tr></thead>";
+		table+="<tbody>";
+		for(var i=START_HOUR;i<=END_HOUR;i++)	
+			table+=generateSectionForHour(i);
+		table+="</tbody></table>";
+		$("#table-schedule").html(table);
+	}
+	function generateSectionForHour(hour){
+		var minutes = 0;		
+		var section="<tr><td rowspan=\"4\" class =\"hour\" id=\""+hour+"\">"+hour+":00</td>";//Section left-header		
+		section+=generateLineInSection(hour,minutes)+"</tr>";//No full section houres
+		minutes+=MINUTES_JUMP;
+		for(var j=0;j<HOUR_PARTES-1;j++){			
+			section+="<tr>"+generateLineInSection(hour,minutes)+"</tr>"			
+			minutes+=MINUTES_JUMP;
+		}		
+		return section;		
+	}
+	
+	function generateLineInSection(hour,minutes){
+		var line="";
+		for(i=0;i<SECTIONS;i++)
+			line+="<td class=\"section\" id=\""+hour+minutes+"_"+(i+1)+"\"></td>";
+		return line;
+	}
+	
+	function addEventToSchedule(startHour,startMinutes,endHour,endMinutes){
+		var mergeCell = ((endHour-startHour) +(endMinutes-startMinutes)/60)*4;
+		var columnIndex = findAvaiableColumn(startHour,startMinutes,mergeCell);	
+		var cellId =""+startHour+startMinutes+"_"+columnIndex;
+		
+		makeCellEvent(cellId,mergeCell);
+		
+		for(var i=1;i<mergeCell;i++){
+			startMinutes+=MINUTES_JUMP;
+			if(startMinutes>=60){
+				startMinutes = 0;
+				startHour++;
+			}
+			currentCellId =""+startHour+startMinutes+"_"+columnIndex;
+			$("#"+currentCellId).remove();
+		}
+	}
+	
+	function makeCellEvent(cellId,mergeCell){
+		$("#"+cellId).attr("rowspan",mergeCell);
+		$("#"+cellId).removeClass("section");
+		$("#"+cellId).addClass("event-section");
+	}
+	
+	function checkCellsAvaibility(startHour,startMinutes,numberOfCells,columnIndex){
+		for(var i=0;i<=numberOfCells;i++){
+			currentCellId =""+startHour+startMinutes+"_"+columnIndex;		
+				//alert(currentCellId+" "+$("#time-grid").find("#"+currentCellId).length);
+			if($("#time-grid").find("#"+currentCellId).length == 0)
+				return false;
+				
+			startMinutes+=MINUTES_JUMP;
+			if(startMinutes>=60){
+				startMinutes = 0;
+				startHour++;
+			}
+		}		
+		return true;
+	}
+	
+	function findAvaiableColumn(startHour,startMinutes,numberOfCells){
+		var i=0;
+		var isFree = false;		
+		while(!isFree && i<=SECTIONS)
+			isFree = checkCellsAvaibility(startHour,startMinutes,numberOfCells,++i);					
+		return i;
+	}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+.scheduler{
+  width: 80%;
+}
+.scheduler thead{
+  background:#5858FA;
+  text-align: center;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 20px;
+  font-style: normal;
+  height: 30px;
+  
+}
+
+.scheduler .hour{
+  width:50px;
+  background: #CED8F6;
+  border-radius: 8px;
+  text-align: center;
+    
+}
+
+.scheduler .section{
+  width:150px;
+  height: 15px;  
+  border-width: 0px;
+  border-style: solid;
+  background: #E0F2F7;
+}
+
+.scheduler .event-section{
+  width:150px;
+  height: 15px;  
+  border-width: 0px;
+  border-style: solid;
+  border-radius: 8px;
+  background: #04B404;
+}
