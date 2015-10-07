@@ -147,4 +147,16 @@
 		addEventToSchedule(16,0,16,45);
 		addEventToSchedule(16,15,16,45);
 		addEventToSchedule(16,15,17,0);
+		addEventToSchedule(10,0,11,30);
+		addEventToSchedule(11,0,12,0);
+		addEventToSchedule(8,0,10,0);
+		addEventToSchedule(9,30,11,0);
+		addEventToSchedule(11,0,12,0);
+		addEventToSchedule(11,0,12,0);
+		addEventToSchedule(12,0,14,30);		
+		addEventToSchedule(11,45,12,15);
+		addEventToSchedule(12,0,12,30);	
+		addEventToSchedule(8,0,17,0);	
+		
+		
 		

@@ -27,19 +27,24 @@ var MINUTES_JUMP = 15;
 
 $(function() {
 		generateTimeSchedule();
-		addEventToSchedule(16,0,16,45);
-		addEventToSchedule(16,15,16,45);
-		addEventToSchedule(16,15,17,0);
-		addEventToSchedule(10,0,11,30);
-		addEventToSchedule(11,0,12,0);
-		addEventToSchedule(8,0,10,0);
-		addEventToSchedule(9,30,11,0);
-		addEventToSchedule(11,0,12,0);
-		addEventToSchedule(11,0,12,0);
-		addEventToSchedule(12,0,14,30);		
-		addEventToSchedule(11,45,12,15);
-		addEventToSchedule(12,0,12,30);	
-		addEventToSchedule(8,0,17,0);			
+		var text = '{"classes":[' +
+				'{"className":"Programowanie aplikacji internetowych","classLead":"mgr Mariusz Bocian","numMembers":"13",'+
+				'"maxMembers":"15","startHour":"8","startMinutes":"0","endHour":"9","endMinutes":"30"},'+
+				'{"className":"Struktury danych oraz algorytmy na nich","classLead":"mgr Mariusz Bocian","numMembers":"13",'+ 
+				'"maxMembers":"15","startHour":"8","startMinutes":"0","endHour":"9","endMinutes":"30"},'+
+				'{"className":"Narzedzia wspomagajace proces wytwarzania oprogramowania","classLead":"dr Jacek Molkus-Bocian","numMembers":"13",'+
+				'"maxMembers":"15","startHour":"12","startMinutes":"30","endHour":"14","endMinutes":"0"},'+
+				'{"className":"GIT- system kontroli wersji","classLead":"dr Marcin Wierzba","numMembers":"13",'+
+				'"maxMembers":"15","startHour":"10","startMinutes":"30","endHour":"12","endMinutes":"15"},'+
+				'{"className":"Integracja Spring z Hibernate","classLead":"dr Grzegorz Tulak","numMembers":"13",'+
+				'"maxMembers":"15","startHour":"9","startMinutes":"15","endHour":"16","endMinutes":"15"}'+				
+				']}'; 
+		obj = JSON.parse(text);
+		addEventToSchedule(obj.classes[0]);
+		addEventToSchedule(obj.classes[1]);
+		addEventToSchedule(obj.classes[2]);
+		addEventToSchedule(obj.classes[3]);
+		addEventToSchedule(obj.classes[4]);
 	});	
 	
 	function generateTimeSchedule(){
@@ -71,10 +76,22 @@ $(function() {
 		return section;		
 	}	
 	
-	function makeCellEvent(cellId,mergeCell){
+	function makeCellEvent(cellId,mergeCell,event){
 		$("#"+cellId).attr("rowspan",mergeCell);
 		$("#"+cellId).removeClass("section");
 		$("#"+cellId).addClass("event-section");
+		$("#"+cellId).html(generateEventDiv(event));		
+	}
+	
+	function generateEventDiv(eventInfo){
+		var eventDiv = "<div class=\"event\">";
+		eventDiv+="<p>"+eventInfo.className+"</p>";
+		eventDiv+="<p>"+eventInfo.classLead+"</p>";
+		eventDiv+="<p>"+eventInfo.numMembers+"/"+eventInfo.maxMembers+"</p>";
+		eventDiv+="<button>Zapisz</button>"
+		eventDiv+="</div>";
+		
+		return eventDiv;
 	}
 	
 	function findAvaiableColumn(startHour,startMinutes,numberOfCells){
@@ -85,12 +102,17 @@ $(function() {
 		return i;
 	}
 	
-	function addEventToSchedule(startHour,startMinutes,endHour,endMinutes){
-		var mergeCell = ((endHour-startHour) +(endMinutes-startMinutes)/60)*4;
-		var columnIndex = findAvaiableColumn(startHour,startMinutes,mergeCell);	
-		var cellId =""+startHour+startMinutes+"_"+columnIndex;
+	function addEventToSchedule(event){
+		var startHour = parseInt(event.startHour);
+		var startMinutes = parseInt(event.startMinutes);
+		var endHour = parseInt(event.endHour);
+		var endMinutes = parseInt(event.endMinutes);
 		
-		makeCellEvent(cellId,mergeCell);
+		mergeCell = ((endHour-startHour) +(endMinutes-startMinutes)/60)*4;
+		columnIndex = findAvaiableColumn(startHour,startMinutes,mergeCell);	
+		cellId =""+startHour+startMinutes+"_"+columnIndex;
+		
+		makeCellEvent(cellId,mergeCell,event);
 		
 		for(var i=1;i<mergeCell;i++){
 			startMinutes+=MINUTES_JUMP;

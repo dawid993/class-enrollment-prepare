@@ -1,5 +1,5 @@
 .scheduler{
-  width: 80%;
+  width: 100%;
 }
 .scheduler thead{
   background:#5858FA;
@@ -8,9 +8,7 @@
   font-size: 20px;
   font-style: normal;
   height: 30px;
-  
 }
-
 .scheduler .hour{
   width:50px;
   background: #CED8F6;
@@ -21,10 +19,10 @@
 
 .scheduler .section{
   width:150px;
-  height: 15px;  
+  height: 20px;  
   border-width: 0px;
-  border-style: solid;
-  background: #E0F2F7;
+  border-style: solid; 
+  background: azure;
 }
 
 .scheduler .event-section{
@@ -33,5 +31,14 @@
   border-width: 0px;
   border-style: solid;
   border-radius: 8px;
-  background: #04B404;
+  background: #5882FA;
+  text-align: center;
+}
+
+.scheduler .event{
+  font-size: 12px;
+}
+
+body{
+  background: #EFF5FB;
 }
